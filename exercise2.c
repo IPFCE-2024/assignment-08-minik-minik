@@ -7,7 +7,8 @@
  * No new nodes should be allocated - only pointers should be changed.
  */
 
-#include "exercise2.h"
+#include "include/exercise2.h"
+#include <assert.h>
 
 /* 
  * Sort a singly linked list in-place using insertion sort
@@ -18,7 +19,41 @@
  * Returns pointer to the new head of the sorted list.
  */
 node* isort(node* list) {
-    return NULL; // Placeholder implementation
+
+    assert(list != NULL); // List must not be empty
+
+    // If list contains only one element: list is sorted
+    if(list->next == NULL)
+        return list;
+
+    node* sorted = NULL; // Set initial sorted list to NULL
+    node* current = list; // Start at the unsorted list
+
+    // Go through all nodes
+    while(current != NULL){
+        node* next = current->next; 
+
+        // If the sorted list is empty, or if current data is smaller than the previous: insert data as first
+        if(sorted == NULL || current->data < sorted->data){
+            current->next = sorted; // Point to start of the sorted list
+            sorted = current; // Current is now the start of the sorted list
+        } else{
+
+            // Else: search for the data's place in the sorted list
+            node* search = sorted;
+
+            // Continue through the list until sorting place is found
+            while(search->next != NULL && search->next->data < current->data){
+                search = search->next;
+            }
+            // Current continues after data place is found
+            current->next = search->next;
+            search->next = current;
+        }
+        // Continue through nodes
+        current = next;
+    }
+    return sorted; // Return sorted list
 }
 
 /* Helper function to print the list */
