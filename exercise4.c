@@ -1,18 +1,5 @@
-/*
- * Exercise 4: Queue Implementation using Stacks (Information Hiding)
- * Assignment 8 - IPFCE 2025
- * 
- * Implement a queue using TWO stacks and ONLY stack methods.
- * You must NOT access the stack implementation directly.
- * This demonstrates the concept of information hiding.
- */
-
-#include "exercise4.h"
-
-/* 
- * Stack operations from Assignment 7
- * These are the ONLY operations you can use on stacks
- */
+#include "include/exercise4.h"
+#include <assert.h>
 
 /* Initialize an empty stack */
 void initialize(stack *s) {
@@ -51,56 +38,44 @@ bool full(stack *s) {
     return false;
 }
 
-/* 
- * Queue operations - implement using ONLY the stack methods above
- * DO NOT access s->head or any internal stack structure directly!
- */
-
-/* 
- * Initialize an empty queue
- * q: pointer to the queue structure
- * 
- * Post-condition: both stacks in the queue are empty
- */
 void init_queue(queue *q) {
-    /* TODO: initialize queue */
+
+    assert(q != NULL); // Ensure queue is not empty
+
+    // Initialize queue stacks with functions allowed
+    initialize(&(q->s1));
+    initialize(&(q->s2));
 }
 
-/* 
- * Insert item x at the back of queue q
- * q: pointer to the queue structure
- * x: item to be inserted
- */
 void enqueue(queue *q, int x) {
-    /* TODO: Implement enqueue using ONLY stack operations */
+
+    assert(q != NULL); // Ensure queue is not empty
+
+    push(&q->s1, x); // Push x to s1
 }
 
-/* 
- * Return (and remove) the front item from queue q
- * q: pointer to the queue structure
- */
 int dequeue(queue *q) {
-    /* TODO: Implement dequeue using ONLY stack operations */
-    
-    return 0;  // TODO: Replace with actual implementation
+
+    assert(q != NULL); // Ensure queue is not empty
+
+    // If s2 is empty: move data from s1 to s2
+    if(empty(&q->s2)){
+        while(!empty(&q->s1)){
+            // Push and pop x from s1 to s2 until s1 is empty
+            int x = pop(&q->s1);
+            push(&q->s2, x);
+        }
+    }
+    return pop(&q->s2); // Return front element
 }
 
-/* 
- * Check if the queue is empty
- * q: pointer to the queue structure
- * Returns: true if both stacks are empty, false otherwise
- */
 bool queue_empty(queue *q) {
-    /* TODO: Implement using ONLY stack operations */
-    return false;  // TODO: Replace with actual implementation
+    assert(q != NULL); // Ensure queue is not empty
+    return empty(&q->s1) && empty(&q->s2); // Check if queue is empty via function
 }
 
-/* 
-* Check if the queue is full
-*/
 bool queue_full(queue *q) {
-    /* TODO: Implement using ONLY stack operations */
-    return false;
+    return false; // "Never" full
 }
 
 /* Helper function to print the queue */
