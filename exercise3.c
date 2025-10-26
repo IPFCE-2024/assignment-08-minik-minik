@@ -1,3 +1,4 @@
+
 #include "include/exercise3.h"
 #include <stdio.h>
 #include <stdlib.h>
